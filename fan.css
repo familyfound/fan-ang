@@ -1,8 +1,12 @@
 
+.fan-tip {
+  pointer-events: none;
+}
+
 .arc.person {
-  stroke: black;
+  stroke: white;
   stroke-width: 4px;
-  fill: blue;
+  fill: #eee;
 }
 
 .arc.person.me {
@@ -11,8 +15,20 @@
 }
 
 .radial {
-  stroke: white;
+  stroke: #ccc;
   fill: transparent;
   stroke-width: 5px;
+  stroke-linecap: square;
 }
 
+.arc.person.working {
+  fill: #eee;
+}
+
+.arc.person.clean {
+  fill: rgb(150, 230, 255);
+}
+
+.arc.person.complete {
+  fill: rgb(115, 255, 176);
+}

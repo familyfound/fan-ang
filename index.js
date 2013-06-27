@@ -1,37 +1,62 @@
 
 var angular = require('angularjs')
   // , query = require('query')
-  , tip = require('tip')
+  , Tip = require('tip')
   , d3 = require('d3')
   , extend = require('extend')
 
   , Chart = require('./lib/chart')
-  , template = require('./template');
+  , template = require('./template')
+  , tip = new Tip('name');
+tip.el.addClass('fan-tip');
 
-function makeNodes(chart, node, person, name, scope, links) {
+function rectCenter(rect) {
+  return {
+    x: rect.left + rect.width/2,
+    y: rect.top + rect.height/2
+  };
+}
+
+function makeNodes(chart, node, person, name, scope, config) {
   if (!node.el) {
     scope.$watch(name + '.father', function (value) {
       if (!value) return;
-      makeNodes(chart, node.father, value, name + '.father', scope, links);
+      makeNodes(chart, node.father, value, name + '.father', scope, config);
     });
     scope.$watch(name + '.mother', function (value) {
       if (!value) return;
-      makeNodes(chart, node.mother, value, name + '.mother', scope, links);
+      makeNodes(chart, node.mother, value, name + '.mother', scope, config);
     });
   }
   var link;
-  if (links) {
-    link = 'http://familysearch.org/tree/#view=ancestor&person=' + person.id;
-    if (typeof (links) === 'function') {
-      link = links(person);
+  if (config.links) {
+    link = 'https://familysearch.org/tree/#view=ancestor&person=' + person.id;
+    if (typeof (config.links) === 'function') {
+      link = config.links(person);
     }
   }
   chart.node(node, link);
+  if (config.tips) {
+    node.el.on('mouseover', function (d) {
+      tip.message(person.display.name);
+      var pos = rectCenter(node.el[0][0].getBoundingClientRect());
+      tip.show(pos.x + window.scrollX, pos.y + window.scrollY);
+      var w = tip.el.width(), h = tip.el.height();
+      // tip.show(d3.event.pageX - w/2, d3.event.pageY - h);
+      tip.show(pos.x + window.scrollX - w/2, pos.y + window.scrollY - h - 10);
+    });
+    node.el.on('mouseout', function (d) {
+      tip.hide();
+    });
+  }
+  if (person.status) {
+    node.el.classed(person.status, true);
+  }
   if (person.father) {
-    makeNodes(chart, node.father, person.father, name + '.father', scope, links);
+    makeNodes(chart, node.father, person.father, name + '.father', scope, config);
   }
   if (person.mother) {
-    makeNodes(chart, node.mother, person.mother, name + '.mother', scope, links);
+    makeNodes(chart, node.mother, person.mother, name + '.mother', scope, config);
   }
 }
 
@@ -59,7 +84,8 @@ angular.module('fan', [])
           ringWidth: 20,
           doubleWidth: true,
           gens: 0,
-          links: false
+          links: false,
+          tips: false
         }, config);
         if (attr.gens) config.gens = parseInt(attr.gens);
         
@@ -72,7 +98,7 @@ angular.module('fan', [])
         scope.$parent.$watch(name, function (value, old) {
           if (!value) return;
           scope.person = value;
-          makeNodes(chart, node, value, name, scope.$parent, config.links);
+          makeNodes(chart, node, value, name, scope.$parent, config);
           chart.addLines(config.gens);
           node.el.attr('class', 'arc person me');
         });

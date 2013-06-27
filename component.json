@@ -10,7 +10,8 @@
     "component/tip": "*",
     "simov/deep-copy": "*",
     "mbostock/d3": "*",
-    "gorillatron/extend": "*"
+    "gorillatron/extend": "*",
+    "component/aurora-tip": "*"
   },
   "development": {},
   "license": "MIT",
