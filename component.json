@@ -9,7 +9,8 @@
     "familyfound/domlog": "*",
     "component/tip": "*",
     "simov/deep-copy": "*",
-    "mbostock/d3": "*"
+    "mbostock/d3": "*",
+    "gorillatron/extend": "*"
   },
   "development": {},
   "license": "MIT",

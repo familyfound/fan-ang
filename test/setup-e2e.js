@@ -112,6 +112,10 @@ function Tester($scope) {
   $scope.boxes = RandGens(man, 5);
   $scope.otherBoxes = MakeGens(man, 5);
   $scope.slowBoxes = SlowGens(man, 7, $scope);
+  $scope.slowConfig = {
+    height: 400,
+    center: {x: 250, y: 300}
+  };
 }
 
 angular.module('test', ['fan']);

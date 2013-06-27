@@ -14,7 +14,16 @@ components: component.json
 clean:
 	rm -fr build components template.js
 
-example: build
-	open test/example.html
+# open browser correctly in mac or linux
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+		open := google-chrome
+endif
+ifeq ($(UNAME_S),Darwin)
+		open := open
+endif
 
-.PHONY: clean
+example:
+	@${open} test/example.html
+
+.PHONY: clean example

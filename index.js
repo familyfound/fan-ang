@@ -3,6 +3,7 @@ var angular = require('angularjs')
   // , query = require('query')
   , tip = require('tip')
   , d3 = require('d3')
+  , extend = require('extend')
 
   , Chart = require('./lib/chart')
   , template = require('./template');
@@ -34,17 +35,29 @@ angular.module('fan', [])
       replace: false,
       restrict: 'A',
       link: function (scope, element, attr) {
-        var name = attr.fan;
-        element[0].innerHTML = '';
-        var chart = new Chart({
+        var name = attr.fan
+          , config = {};
+        if (attr.config) {
+          if (attr.config[0] === '{') { // eval raw
+            config = JSON.parse(attr.config);
+          } else {
+            config = scope.$parent[attr.config];
+          }
+        }
+        config = extend({
           el: element[0],
-          color: 'red',
           width: 500,
           height: 200,
           center: {x: 250, y: 150},
           ringWidth: 20,
-          doubleWidth: true
-        });
+          doubleWidth: true,
+          gens: 0,
+          links: false
+        }, config);
+        if (attr.gens) config.gens = parseInt(attr.gens);
+        
+        element[0].innerHTML = '';
+        var chart = new Chart(config);
         var node = {
           gen: 0,
           pos: 0
@@ -53,7 +66,7 @@ angular.module('fan', [])
           if (!value) return;
           scope.person = value;
           makeNodes(chart, node, value, name, scope.$parent);
-          chart.addLines(parseInt(attr.gens) || 0);
+          chart.addLines(config.gens);
           node.el.attr('class', 'arc person me');
         });
       }
