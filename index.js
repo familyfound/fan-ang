@@ -39,11 +39,7 @@ function makeNodes(chart, node, person, name, scope, config) {
   if (config.tips) {
     node.el.on('mouseover', function (d) {
       tip.message(person.display.name);
-      var pos = rectCenter(node.el[0][0].getBoundingClientRect());
-      tip.show(pos.x + window.scrollX, pos.y + window.scrollY);
-      var w = tip.el.width(), h = tip.el.height();
-      // tip.show(d3.event.pageX - w/2, d3.event.pageY - h);
-      tip.show(pos.x + window.scrollX - w/2, pos.y + window.scrollY - h - 10);
+      tip.show(d3.event.pageX, d3.event.pageY - 10);
     });
     node.el.on('mouseout', function (d) {
       tip.hide();

@@ -3,6 +3,10 @@
   pointer-events: none;
 }
 
+.fan-tip .tip-arrow {
+  display: none;
+}
+
 .arc.person {
   stroke: white;
   stroke-width: 4px;
