@@ -8,23 +8,30 @@ var angular = require('angularjs')
   , Chart = require('./lib/chart')
   , template = require('./template');
 
-function makeNodes(chart, node, person, name, scope) {
+function makeNodes(chart, node, person, name, scope, links) {
   if (!node.el) {
     scope.$watch(name + '.father', function (value) {
       if (!value) return;
-      makeNodes(chart, node.father, value, name + '.father', scope);
+      makeNodes(chart, node.father, value, name + '.father', scope, links);
     });
     scope.$watch(name + '.mother', function (value) {
       if (!value) return;
-      makeNodes(chart, node.mother, value, name + '.mother', scope);
+      makeNodes(chart, node.mother, value, name + '.mother', scope, links);
     });
   }
-  chart.node(node);
+  var link;
+  if (links) {
+    link = 'http://familysearch.org/tree/#view=ancestor&person=' + person.id;
+    if (typeof (links) === 'function') {
+      link = links(person);
+    }
+  }
+  chart.node(node, link);
   if (person.father) {
-    makeNodes(chart, node.father, person.father, name + '.father', scope);
+    makeNodes(chart, node.father, person.father, name + '.father', scope, links);
   }
   if (person.mother) {
-    makeNodes(chart, node.mother, person.mother, name + '.mother', scope);
+    makeNodes(chart, node.mother, person.mother, name + '.mother', scope, links);
   }
 }
 
@@ -65,7 +72,7 @@ angular.module('fan', [])
         scope.$parent.$watch(name, function (value, old) {
           if (!value) return;
           scope.person = value;
-          makeNodes(chart, node, value, name, scope.$parent);
+          makeNodes(chart, node, value, name, scope.$parent, config.links);
           chart.addLines(config.gens);
           node.el.attr('class', 'arc person me');
         });

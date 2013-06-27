@@ -114,7 +114,12 @@ function Tester($scope) {
   $scope.slowBoxes = SlowGens(man, 7, $scope);
   $scope.slowConfig = {
     height: 400,
+    gens: 7,
     center: {x: 250, y: 300}
+  };
+  $scope.otherConfig = {
+    gens: 5,
+    links: true
   };
 }
 
