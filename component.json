@@ -1,0 +1,25 @@
+{
+  "name": "fan",
+  "repo": "familyfound/fan",
+  "description": "A Fan angular directive",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "jabapyth/angularjs": "*",
+    "familyfound/domlog": "*",
+    "component/tip": "*",
+    "simov/deep-copy": "*",
+    "mbostock/d3": "*"
+  },
+  "development": {},
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js",
+    "lib/chart.js",
+    "template.js"
+  ],
+  "styles": [
+    "fan.css"
+  ]
+}

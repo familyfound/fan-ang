@@ -1,0 +1,18 @@
+
+.arc.person {
+  stroke: black;
+  stroke-width: 4px;
+  fill: blue;
+}
+
+.arc.person.me {
+  stroke: transparent;
+  fill: transparent;
+}
+
+.radial {
+  stroke: white;
+  fill: transparent;
+  stroke-width: 5px;
+}
+
