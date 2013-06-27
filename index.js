@@ -38,7 +38,7 @@ function makeNodes(chart, node, person, name, scope, config) {
   chart.node(node, link);
   if (config.tips) {
     node.el.on('mouseover', function (d) {
-      tip.message(person.display.name);
+      tip.message(person.display.name + ' ' + person.display.lifespan);
       tip.show(d3.event.pageX, d3.event.pageY - 10);
     });
     node.el.on('mouseout', function (d) {
@@ -81,7 +81,8 @@ angular.module('fan', [])
           doubleWidth: true,
           gens: 0,
           links: false,
-          tips: false
+          tips: false,
+          removeRoot: false
         }, config);
         if (attr.gens) config.gens = parseInt(attr.gens);
         
@@ -97,6 +98,9 @@ angular.module('fan', [])
           makeNodes(chart, node, value, name, scope.$parent, config);
           chart.addLines(config.gens);
           node.el.attr('class', 'arc person me');
+          if (config.removeRoot) {
+            node.el.remove();
+          }
         });
       }
     };
