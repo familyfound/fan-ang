@@ -23,14 +23,22 @@ ifeq ($(UNAME_S),Darwin)
 		open := open
 endif
 
+test: build
+	@${open} test/index.html
+
 example: build
 	@${open} test/example.html
+
+testci: build
+	@./node_modules/.bin/testem test/testem.json
 
 docme: build
 	mv build _build
 	mv test _test
+	mv component/visionmedia-mocha _vm
 	git checkout gh-pages
 	mv _build build
 	mv _test test
+	mv _vm component/visionmedia-mocha
 
-.PHONY: clean example docme
+.PHONY: clean example docme test testci

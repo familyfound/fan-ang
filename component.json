@@ -13,7 +13,10 @@
     "gorillatron/extend": "*",
     "component/aurora-tip": "*"
   },
-  "development": {},
+  "development": {
+    "chaijs/chai": "*",
+    "visionmedia/mocha": "*"
+  },
   "license": "MIT",
   "main": "index.js",
   "scripts": [

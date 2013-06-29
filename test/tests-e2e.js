@@ -16,7 +16,7 @@ after(function(){
   // bootstrap('template', 'test');
 });
 
-describe('note guy', function(){
+describe('fan chart', function(){
   var node, injector;
   beforeEach(function(){
     node = bootstrap('template', 'test');
