@@ -9,7 +9,7 @@
     "familyfound/domlog": "*",
     "component/tip": "*",
     "simov/deep-copy": "*",
-    "mbostock/d3": "*",
+    "mbostock/d3": "v3.2.2",
     "gorillatron/extend": "*",
     "component/aurora-tip": "*"
   },

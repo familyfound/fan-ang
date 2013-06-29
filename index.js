@@ -18,7 +18,7 @@ function rectCenter(rect) {
 }
 
 function makeNodes(chart, node, person, name, scope, config) {
-  if (!node.el) {
+  if (!node.el && !person.hideParents) {
     scope.$watch(name + '.father', function (value) {
       if (!value) return;
       makeNodes(chart, node.father, value, name + '.father', scope, config);
@@ -36,6 +36,9 @@ function makeNodes(chart, node, person, name, scope, config) {
     }
   }
   chart.node(node, link);
+  if (config.onNode) {
+    config.onNode(node.el, person);
+  }
   if (config.tips) {
     node.el.on('mouseover', function (d) {
       tip.message(person.display.name + ' ' + person.display.lifespan);
@@ -48,11 +51,13 @@ function makeNodes(chart, node, person, name, scope, config) {
   if (person.status) {
     node.el.classed(person.status, true);
   }
-  if (person.father) {
-    makeNodes(chart, node.father, person.father, name + '.father', scope, config);
-  }
-  if (person.mother) {
-    makeNodes(chart, node.mother, person.mother, name + '.mother', scope, config);
+  if (!person.hideParents) {
+    if (person.father) {
+      makeNodes(chart, node.father, person.father, name + '.father', scope, config);
+    }
+    if (person.mother) {
+      makeNodes(chart, node.mother, person.mother, name + '.mother', scope, config);
+    }
   }
 }
 
@@ -88,12 +93,13 @@ angular.module('fan', [])
         
         element[0].innerHTML = '';
         var chart = new Chart(config);
-        var node = {
-          gen: 0,
-          pos: 0
-        };
         scope.$parent.$watch(name, function (value, old) {
           if (!value) return;
+          var node = {
+            gen: 0,
+            pos: 0
+          };
+          chart.clear();
           scope.person = value;
           makeNodes(chart, node, value, name, scope.$parent, config);
           chart.addLines(config.gens);

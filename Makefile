@@ -23,7 +23,7 @@ ifeq ($(UNAME_S),Darwin)
 		open := open
 endif
 
-example:
+example: build
 	@${open} test/example.html
 
 .PHONY: clean example
