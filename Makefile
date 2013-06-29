@@ -32,11 +32,12 @@ example: build
 testci: build
 	@./node_modules/.bin/testem test/testem.json
 
-docme: build
+docme: components build
 	mv build _build
 	mv test _test
 	mv components/visionmedia-mocha _vm
 	git checkout gh-pages
+	rm -rf build test components/visionmedia-mocha
 	mv _build build
 	mv _test test
 	mv _vm components/visionmedia-mocha
