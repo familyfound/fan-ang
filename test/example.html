@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Component Test</title>
+    <link rel="stylesheet" href="../build/build.css">
+    <meta charset="utf-8">
+    <style>
+      body { font-family: sans-serif; }
+      table {
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid #ccc;
+      }
+      th, td {
+        padding: 5px 10px;
+      }
+      .docs {
+        margin-bottom: 30px;
+      }
+      .example {
+        float: left;
+        margin-right: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <script src="../build/build.js"></script>
+      <div class="docs">
+        <h1>FamilyFound Fan Example</h1>
+      </div>
+      <hr/>
+      <div id="ang" ng-app="test">
+        <div ng-controller="Tester">
+          <h3>Fan</h3>
+          <h4>Slow</h4>
+          <div data-fan="slowBoxes" data-config="slowConfig">Will be Replaced</div>
+          <h4>Random</h4>
+          <div data-fan="boxes">Will be Replaced</div>
+          <h4>Full & links</h4>
+          <div data-fan="otherBoxes" data-config="otherConfig">Will be Replaced</div>
+          <h4>Tooltips</h4>
+          <div data-fan="otherBoxes" data-config='{"tips": true}'>Will be Replaced</div>
+        </div>
+      </div>
+      <script src="setup-e2e.js"></script>
+    </div>
+  </body>
+</html>
