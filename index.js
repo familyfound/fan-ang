@@ -17,25 +17,46 @@ function rectCenter(rect) {
   };
 }
 
-function makeNodes(chart, node, person, name, scope, config) {
-  if (!node.el && !person.hideParents) {
-    scope.$watch(name + '.father', function (value) {
-      if (!value) return;
-      makeNodes(chart, node.father, value, name + '.father', scope, config);
-    });
-    scope.$watch(name + '.mother', function (value) {
-      if (!value) return;
-      makeNodes(chart, node.mother, value, name + '.mother', scope, config);
-    });
-  }
-  var link;
+function getLink(person, config) {
   if (config.links) {
-    link = 'https://familysearch.org/tree/#view=ancestor&person=' + person.id;
+    return 'https://familysearch.org/tree/#view=ancestor&person=' + person.id;
     if (typeof (config.links) === 'function') {
-      link = config.links(person);
+      return config.links(person);
     }
   }
-  chart.node(node, link);
+}
+
+function makeChild(chart, i, nodes, person, config) {
+  var child = person.children[i];
+  nodes[i] = chart.child(i, child, getLink(person.children[i], config));
+  if (config.onNode) {
+    config.onNode(nodes[i], child);
+  }
+  if (child.status) {
+    nodes[i].classed(child.status, true);
+  }
+  if (config.tips) {
+    nodes[i].on('mouseover', function (d) {
+      tip.message(child.display.name + ' ' + child.display.lifespan);
+      tip.show(d3.event.pageX, d3.event.pageY - 10);
+    });
+    nodes[i].on('mouseout', function (d) {
+      tip.hide();
+    });
+  }
+}
+
+function makeChildren(chart, node, value, config) {
+  if (!value.children) return;
+  for (var i=0; i<value.children.length; i++) {
+    if (value.children[i] && !node.children[i]) {
+      makeChild(chart, i, node.children, value, config);
+    }
+  }
+}
+
+function makeNodes(chart, node, person, name, scope, config) {
+  chart.node(node, getLink(person, config));
   if (config.onNode) {
     config.onNode(node.el, person);
   }
@@ -81,6 +102,7 @@ angular.module('fan', [])
           el: element[0],
           width: 500,
           height: 200,
+          childHoriz: 6,
           center: {x: 250, y: 150},
           ringWidth: 20,
           doubleWidth: true,
@@ -89,25 +111,34 @@ angular.module('fan', [])
           tips: false,
           removeRoot: false
         }, config);
-        if (attr.gens) config.gens = parseInt(attr.gens);
+        if (attr.gens) config.gens = parseInt(attr.gens, 10);
         
         element[0].innerHTML = '';
         var chart = new Chart(config);
+        var node;
         scope.$parent.$watch(name, function (value, old) {
           if (!value) return;
-          var node = {
+          node = {
             gen: 0,
-            pos: 0
+            pos: 0,
+            children: {},
           };
           chart.clear();
+          chart.addLines(config.gens);
+
           scope.person = value;
           makeNodes(chart, node, value, name, scope.$parent, config);
-          chart.addLines(config.gens);
+          makeChildren(chart, node, value, config);
           node.el.attr('class', 'arc person me');
           if (config.removeRoot) {
             node.el.remove();
           }
         });
+        scope.$parent.$watch(name, function (value) {
+          if (!value) return;
+          makeNodes(chart, node, value, name, scope.$parent, config);
+          makeChildren(chart, node, value, config);
+        }, true);
       }
     };
   });

@@ -18,7 +18,11 @@ var man = {
   },
   todos: [],
   father: null,
-  mother: null
+  fatherId: 'ABC-EF',
+  mother: null,
+  motherId: 'XYZ',
+  childIds: [],
+  children: null
 };
 
 var woman = {
@@ -31,7 +35,11 @@ var woman = {
   },
   todos: [],
   father: null,
-  mother: null
+  fatherId: 'ABC-EF',
+  mother: null,
+  motherId: 'XYZ',
+  childIds: [],
+  children: null
 };
 
 function MakeGens(base, max) {
@@ -60,16 +68,34 @@ function RandGens(base, max) {
   return person;
 }
 
-function SlowGens(base, max, scope) {
+function randStatus() {
+  return ['working', 'clean', 'complete'][parseInt(Math.random()*3)]; 
+}
+
+function SlowGens(base, max, scope, stati, root) {
   if (max <= 0) return null;
   var person = copy(base);
+  if (stati) {
+    person.status = randStatus();
+  }
   setTimeout(function () {
-    person.father = SlowGens(man, max-1, scope);
+    person.father = SlowGens(man, max-1, scope, stati);
     scope.$digest();
   }, Math.random() * 300 + 200);
   setTimeout(function () {
-    person.mother = SlowGens(woman, max-1, scope);
+    person.mother = SlowGens(woman, max-1, scope, stati);
   }, Math.random() * 300 + 200);
+  if (root) {
+    person.children = [];
+    for (var i=0; i<10; i++) {
+      person.children.push(null);
+      setTimeout(function (i) {
+        person.children[i] = copy(base);
+        person.children[i].status = randStatus();
+        scope.$digest();
+      }.bind(null, i), Math.random()*300 + 200);
+    }
+  }
   return person;
 }
 
@@ -112,6 +138,27 @@ function Tester($scope) {
   $scope.boxes = RandGens(man, 5);
   $scope.otherBoxes = MakeGens(man, 5);
   $scope.slowBoxes = SlowGens(man, 7, $scope);
+  $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+  setTimeout(function () {
+    console.log('reload');
+    $scope.kidsBoxes = null;
+    $scope.$digest();
+    $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+    $scope.$digest();
+  }, 5000);
+  $scope.kidsConfig = {
+    gens: 5,
+    tips: true,
+    onNode: function (el, person) {
+      el.on('click', function () {
+        console.log('clicked', person);
+        $scope.kidsBoxes = null;
+        $scope.$digest();
+        $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+        $scope.$digest();
+      });
+    }
+  };
   $scope.slowConfig = {
     height: 400,
     gens: 7,

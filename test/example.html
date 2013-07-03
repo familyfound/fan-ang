@@ -21,6 +21,9 @@
         float: left;
         margin-right: 30px;
       }
+      svg {
+        outline: 1px solid black;
+      }
     </style>
   </head>
   <body>
@@ -33,14 +36,26 @@
       <div id="ang" ng-app="test">
         <div ng-controller="Tester">
           <h3>Fan</h3>
-          <h4>Slow</h4>
+          <div class="example">
+            <h4>With Kids</h4>
+            <div data-fan="kidsBoxes" data-config="kidsConfig">Hazing chillens</div>
+          </div><div class="example">
+          <h4>Slow & Big</h4>
           <div data-fan="slowBoxes" data-config="slowConfig">Will be Replaced</div>
+          </div><div class="example">
           <h4>Random</h4>
           <div data-fan="boxes">Will be Replaced</div>
+          </div><div class="example">
           <h4>Full & links</h4>
           <div data-fan="otherBoxes" data-config="otherConfig">Will be Replaced</div>
+          </div><div class="example">
           <h4>Tooltips</h4>
           <div data-fan="otherBoxes" data-config='{"tips": true}'>Will be Replaced</div>
+          </div><div class="example">
+          </div><div class="example">
+          </div><div class="example">
+          </div><div class="example">
+            </di>
         </div>
       </div>
       <script src="setup-e2e.js"></script>

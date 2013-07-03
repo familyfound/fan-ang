@@ -7,6 +7,12 @@
   display: none;
 }
 
+.rect.person {
+  stroke: white;
+  stroke-width: 4px;
+  fill: #eee;
+}
+
 .arc.person {
   stroke: white;
   stroke-width: 4px;
@@ -21,18 +27,18 @@
 .radial {
   stroke: #ccc;
   fill: transparent;
-  stroke-width: 5px;
+  stroke-width: 2px;
   stroke-linecap: square;
 }
 
-.arc.person.working {
+.person.working {
   fill: #eee;
 }
 
-.arc.person.clean {
+.person.clean {
   fill: rgb(150, 230, 255);
 }
 
-.arc.person.complete {
+.person.complete {
   fill: rgb(115, 255, 176);
 }
