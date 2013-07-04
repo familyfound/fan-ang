@@ -123,7 +123,7 @@ function makeFamilies(spousebase, spouses, maxChildren, scope) {
         family[j + 1] = copy([man, woman][parseInt(2 * Math.random())]);
         family[j + 1].status = randStatus();
         scope.$digest();
-      }.bind(null, family, j));
+      }.bind(null, family, j), 200 + Math.random() * 300);
     }
     families[id] = family;
     console.log(kids);

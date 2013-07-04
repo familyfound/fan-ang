@@ -83,7 +83,7 @@ function makeFamilies(chart, node, person, config) {
         makeChild(chart, ccounts, j, node.families[motherId], family, config);
       }
     }
-    ccounts.push(family.length - 1);
+    ccounts.push(family.length - 2);
     i++;
   }
   chart.familyHeight(ccounts);
