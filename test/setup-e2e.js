@@ -138,6 +138,14 @@ function Tester($scope) {
   $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
   $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
   setTimeout(function () {
+    console.log('reload 2');
+    $scope.kidsBoxes = null;
+    $scope.$digest();
+    $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+    $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
+    $scope.$digest();
+  }, 10000);
+  setTimeout(function () {
     console.log('reload');
     $scope.kidsBoxes = null;
     $scope.$digest();
