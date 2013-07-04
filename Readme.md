@@ -9,6 +9,19 @@
 
 ## API
 
+Person:
+{
+  display: { name, gender, lifespan, birthDate, birthPlace }
+  id:
+  todos: [{}, ...]
+  father: person
+  mother: person
+  families: {
+    motherId: [mother, child[, child...]]
+    ...
+  }
+}
+
    
 
 ## License

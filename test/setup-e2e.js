@@ -22,7 +22,8 @@ var man = {
   mother: null,
   motherId: 'XYZ',
   childIds: [],
-  children: null
+  children: null,
+  id: 'MA-XN'
 };
 
 var woman = {
@@ -39,7 +40,8 @@ var woman = {
   mother: null,
   motherId: 'XYZ',
   childIds: [],
-  children: null
+  children: null,
+  id: 'WOM-AN'
 };
 
 function MakeGens(base, max) {
@@ -69,10 +71,10 @@ function RandGens(base, max) {
 }
 
 function randStatus() {
-  return ['working', 'clean', 'complete'][parseInt(Math.random()*3)]; 
+  return ['working', 'clean', 'complete'][parseInt(Math.random()*3)];
 }
 
-function SlowGens(base, max, scope, stati, root) {
+function SlowGens(base, max, scope, stati) {
   if (max <= 0) return null;
   var person = copy(base);
   if (stati) {
@@ -85,70 +87,69 @@ function SlowGens(base, max, scope, stati, root) {
   setTimeout(function () {
     person.mother = SlowGens(woman, max-1, scope, stati);
   }, Math.random() * 300 + 200);
-  if (root) {
-    person.children = [];
-    for (var i=0; i<10; i++) {
-      person.children.push(null);
-      setTimeout(function (i) {
-        person.children[i] = copy(base);
-        person.children[i].status = randStatus();
-        scope.$digest();
-      }.bind(null, i), Math.random()*300 + 200);
-    }
-  }
   return person;
 }
 
-var one = {
-  display: {
-    name: "Jared Forsyth",
-    gender: "Male",
-    lifespan: "1599-1634",
-    birthDate: "12 July 1599",
-    birthPlace: "Mayfield, Iowa"
-  },
-  todos: [],
-  father: {
-    display: {
-      name: "George James Forsyth",
-      gender: "Male",
-      lifespan: "1560-1612",
-      birthDate: "Unknown",
-      birthPlace: "Unknown"
-    },
-    todos: ["hello"],
-    father: null,
-    mother: null
-  },
-  mother: {
-    display: {
-      name: "Eliza Jane Forsyth",
-      gender: "Female",
-      lifespan: "1560-1612",
-      birthDate: "Unknown",
-      birthPlace: "Unknown"
-    },
-    todos: [],
-    father: null,
-    mother: null
+function rc(){
+  var chars = 'WERTYUIOPASDFGHJKLZXCVBNM';
+  return chars[parseInt(Math.random() * chars.length)];
+}
+
+function randId() {
+  var id = '';
+  for (var i=0; i<7; i++) {
+    if (i===4) id += '-';
+    id += rc();
   }
-};
+  return id;
+}
+
+function makeFamilies(spousebase, spouses, maxChildren, scope) {
+  var families = {}, family, kids, id;
+  for (var i=0; i<spouses; i++) {
+    family = [null];
+    id = randId();
+    setTimeout(function (family, id) {
+      family[0] = copy(spousebase);
+      family[0].id = id;
+      family[0].status = randStatus();
+      scope.$digest();
+    }.bind(null, family, id), 200 + Math.random() * 300);
+
+    kids = parseInt(Math.random() * (maxChildren - 2) + 2);
+    for (var j=0; j<kids; j++) {
+      family.push(null)
+      setTimeout(function (family, j) {
+        family[j + 1] = copy([man, woman][parseInt(2 * Math.random())]);
+        family[j + 1].status = randStatus();
+        scope.$digest();
+      }.bind(null, family, j));
+    }
+    families[id] = family;
+    console.log(kids);
+  }
+  return families;
+}
 
 function Tester($scope) {
   $scope.boxes = RandGens(man, 5);
   $scope.otherBoxes = MakeGens(man, 5);
   $scope.slowBoxes = SlowGens(man, 7, $scope);
   $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+  $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
   setTimeout(function () {
     console.log('reload');
     $scope.kidsBoxes = null;
     $scope.$digest();
     $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+    $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
     $scope.$digest();
   }, 5000);
   $scope.kidsConfig = {
     gens: 5,
+    height: 170,
     tips: true,
+    doubleWidth: false,
     onNode: function (el, person) {
       el.on('click', function () {
         console.log('clicked', person);
@@ -171,17 +172,4 @@ function Tester($scope) {
 }
 
 angular.module('test', ['fan']);
-/*
-  .factory('ffperson', function () {
-    return function (pid, next) {
-      log('person api', pid, next);
-      setTimeout(function () {
-        next({name: 'Edward'});
-      }, 1000);
-    }
-  })
-  .factory('ffApi', function () {
-    return log;
-  });*/
-    
 

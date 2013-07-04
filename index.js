@@ -19,16 +19,28 @@ function rectCenter(rect) {
 
 function getLink(person, config) {
   if (config.links) {
-    return 'https://familysearch.org/tree/#view=ancestor&person=' + person.id;
     if (typeof (config.links) === 'function') {
       return config.links(person);
     }
+    return 'https://familysearch.org/tree/#view=ancestor&person=' + person.id;
   }
 }
 
-function makeChild(chart, i, nodes, person, config) {
-  var child = person.children[i];
-  nodes[i] = chart.child(i, child, getLink(person.children[i], config));
+function tipNode(node, person) {
+  node.on('mouseover', function (d) {
+    tip.message(person.display.name + ' ' + person.display.lifespan);
+    tip.show(d3.event.pageX, d3.event.pageY - 10);
+  });
+  node.on('mouseout', function (d) {
+    tip.hide();
+  });
+}
+
+// ccounts: list of the counts of children in the preceeding families. This
+// is required to properly position the child.
+function makeChild(chart, ccounts, i, nodes, family, config) {
+  var child = family[i];
+  nodes[i] = chart.child(ccounts, i - 1, child, getLink(family[i], config));
   if (config.onNode) {
     config.onNode(nodes[i], child);
   }
@@ -36,23 +48,45 @@ function makeChild(chart, i, nodes, person, config) {
     nodes[i].classed(child.status, true);
   }
   if (config.tips) {
-    nodes[i].on('mouseover', function (d) {
-      tip.message(child.display.name + ' ' + child.display.lifespan);
-      tip.show(d3.event.pageX, d3.event.pageY - 10);
-    });
-    nodes[i].on('mouseout', function (d) {
-      tip.hide();
-    });
+    tipNode(nodes[i], child);
   }
 }
 
-function makeChildren(chart, node, value, config) {
-  if (!value.children) return;
-  for (var i=0; i<value.children.length; i++) {
-    if (value.children[i] && !node.children[i]) {
-      makeChild(chart, i, node.children, value, config);
-    }
+function makeMother(chart, ccounts, nodes, family, config) {
+  if (!family || !family[0]) return;
+  var mother = family[0];
+  if (nodes[0]) return;
+  nodes[0] = chart.mother(ccounts, mother, getLink(mother, config));
+  if (config.onNode) {
+    config.onNode(nodes[0], mother);
   }
+  if (config.tips) {
+    tipNode(nodes[0], mother);
+  }
+  if (mother.status) {
+    nodes[0].classed(mother.status, true);
+  }
+}
+
+function makeFamilies(chart, node, person, config) {
+  if (!person.families) return;
+  if (!node.families) node.families = {};
+  var i = 0
+    , ccounts = []
+    , family;
+  for (var motherId in person.families) {
+    if (!node.families[motherId]) node.families[motherId] = {};
+    family = person.families[motherId];
+    makeMother(chart, ccounts, node.families[motherId], family, config);
+    for (var j=1; j<family.length; j++) {
+      if (family[j] && !node.families[motherId][j]) {
+        makeChild(chart, ccounts, j, node.families[motherId], family, config);
+      }
+    }
+    ccounts.push(family.length - 1);
+    i++;
+  }
+  chart.familyHeight(ccounts);
 }
 
 function makeNodes(chart, node, person, name, scope, config) {
@@ -121,14 +155,14 @@ angular.module('fan', [])
           node = {
             gen: 0,
             pos: 0,
-            children: {},
+            families: {}
           };
           chart.clear();
           chart.addLines(config.gens);
 
           scope.person = value;
           makeNodes(chart, node, value, name, scope.$parent, config);
-          makeChildren(chart, node, value, config);
+          makeFamilies(chart, node, value, config);
           node.el.attr('class', 'arc person me');
           if (config.removeRoot) {
             node.el.remove();
@@ -137,7 +171,7 @@ angular.module('fan', [])
         scope.$parent.$watch(name, function (value) {
           if (!value) return;
           makeNodes(chart, node, value, name, scope.$parent, config);
-          makeChildren(chart, node, value, config);
+          makeFamilies(chart, node, value, config);
         }, true);
       }
     };
