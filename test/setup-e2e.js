@@ -50,7 +50,7 @@ function MakeGens(base, max) {
   person.father = MakeGens(man, max-1);
   person.mother = MakeGens(woman, max-1);
   person.todos = [];
-  person.status = 'working';
+  person.status = 'inactive';
   return person;
 }
 
@@ -66,12 +66,12 @@ function RandGens(base, max) {
 
   person.father = RandGens(man, max-1);
   person.mother = RandGens(woman, max-1);
-  person.status = ['working', 'clean', 'complete'][parseInt(Math.random()*3)];
+  person.status = randStatus();
   return person;
 }
 
 function randStatus() {
-  return ['working', 'clean', 'complete'][parseInt(Math.random()*3)];
+  return ['inactive', 'active', 'clean', 'complete'][parseInt(Math.random()*4)];
 }
 
 function SlowGens(base, max, scope, stati) {

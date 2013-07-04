@@ -110,6 +110,7 @@ function makeFamilies(chart, node, person, config, scope, name) {
 function makeNodes(chart, node, person, name, scope, config) {
   var watches = [];
   watches.push(scope.$watch(name + '.status', function (value, old) {
+    if (!value) return;
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
   }));

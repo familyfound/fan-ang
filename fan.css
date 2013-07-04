@@ -14,19 +14,16 @@
 .circle.person {
   stroke: #999;
   stroke-width: 2px;
-  fill: #eee;
 }
 
 .rect.person {
   stroke: white;
   stroke-width: 4px;
-  fill: #eee;
 }
 
 .arc.person {
   stroke: white;
   stroke-width: 4px;
-  fill: #eee;
 }
 
 .radial {
@@ -36,14 +33,22 @@
   stroke-linecap: square;
 }
 
-.person.working {
+.person, .person.inactive {
   fill: #eee;
+  background-color: #eee;
+}
+
+.person.active {
+  fill: #fbe;
+  background-color: #fbe;
 }
 
 .person.clean {
   fill: rgb(150, 230, 255);
+  background-color: rgb(150, 230, 255);
 }
 
 .person.complete {
   fill: rgb(115, 255, 176);
+  background-color: rgb(115, 255, 176);
 }
