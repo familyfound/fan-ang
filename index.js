@@ -100,12 +100,19 @@ function makeFamilies(chart, node, person, config, scope, name) {
     ccounts.push(family.length - 1);
     i++;
   }
-  chart.familyHeight(ccounts);
+  var nheight = chart.familyHeight(ccounts);
+  if (config.heightChange) {
+    config.heightChange(nheight);
+  }
   return watches;
 }
 
 function makeNodes(chart, node, person, name, scope, config) {
   var watches = [];
+  watches.push(scope.$watch(name + '.status', function (value, old) {
+    if (old) node.el.classed(old, false);
+    if (value) node.el.classed(value, true);
+  }));
   chart.node(node, getLink(person, config));
   if (config.onNode) {
     config.onNode(node.el, person);

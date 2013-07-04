@@ -156,6 +156,8 @@ function Tester($scope) {
   $scope.kidsConfig = {
     gens: 5,
     height: 170,
+    width: 220,
+    center: {x: 110, y: 130},
     tips: true,
     doubleWidth: false,
     onNode: function (el, person) {
