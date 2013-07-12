@@ -41,8 +41,8 @@ function tipNode(node, person) {
 function makeChild(chart, ccounts, i, nodes, family, config) {
   var child = family[i];
   nodes[i] = chart.child(ccounts, i - 1, child, getLink(family[i], config));
-  if (config.onNode) {
-    config.onNode(nodes[i], child);
+  if (config.onChild) {
+    config.onChild(nodes[i], child);
   }
   if (child.status) {
     nodes[i].classed(child.status, true);
@@ -57,8 +57,8 @@ function makeMother(chart, ccounts, nodes, family, config) {
   var mother = family[0];
   if (nodes[0]) return;
   nodes[0] = chart.mother(ccounts, mother, getLink(mother, config));
-  if (config.onNode) {
-    config.onNode(nodes[0], mother);
+  if (config.onSpouse) {
+    config.onSpouse(nodes[0], mother);
   }
   if (config.tips) {
     tipNode(nodes[0], mother);
@@ -107,7 +107,8 @@ function makeFamilies(chart, node, person, config, scope, name) {
   return watches;
 }
 
-function makeNodes(chart, node, person, name, scope, config) {
+function makeNodes(chart, node, person, name, scope, config, root) {
+  if (!person) return [];
   var watches = [];
   watches.push(scope.$watch(name + '.status', function (value, old) {
     if (!value) return;
@@ -115,8 +116,8 @@ function makeNodes(chart, node, person, name, scope, config) {
     if (value) node.el.classed(value, true);
   }));
   chart.node(node, getLink(person, config));
-  if (config.onNode) {
-    config.onNode(node.el, person);
+  if (!root && config.onParent) {
+    config.onParent(node.el, person);
   }
   if (config.tips) {
     node.el.on('mouseover', function (d) {
@@ -133,24 +134,26 @@ function makeNodes(chart, node, person, name, scope, config) {
   if (!person.hideParents) {
     if (person.father) {
       watches.push(makeNodes(chart, node.father, person.father,
-                                         name + '.father', scope, config));
+                             name + '.father', scope, config));
     }
     if (!node.fatherWatch) {
       node.fatherWatch = scope.$watch(name + '.father', function (value) {
         if (value) {
-          watches.push(makeNodes(chart, node.father, person.father, name + '.father', scope, config));
+          watches.push(makeNodes(chart, node.father, person.father,
+                                 name + '.father', scope, config));
         }
       });
       watches.push(node.fatherWatch);
     }
     if (person.mother) {
       watches.push(makeNodes(chart, node.mother, person.mother,
-                                         name + '.mother', scope, config));
+                             name + '.mother', scope, config));
     }
     if (!node.motherWatch) {
       node.motherWatch = scope.$watch(name + '.mother', function (value) {
         if (value) {
-          watches.push(makeNodes(chart, node.mother, person.mother, name + '.mother', scope, config));
+          watches.push(makeNodes(chart, node.mother, person.mother,
+                                 name + '.mother', scope, config));
         }
       });
       watches.push(node.motherWatch);
@@ -222,8 +225,10 @@ angular.module('fan', [])
               console.log('removing watches', killWatches(watches));
             }.bind(null, watches.slice()), 0);
           }
-          watches = makeNodes(chart, node, value, name, scope.$parent, config);
-          watches.push(makeFamilies(chart, node, value, config, scope.$parent, name));
+          watches = makeNodes(chart, node, value, name,
+                              scope.$parent, config, true);
+          watches.push(makeFamilies(chart, node, value, config,
+                                    scope.$parent, name));
           node.el.attr('class', 'arc person me');
           if (config.removeRoot) {
             node.el.remove();
