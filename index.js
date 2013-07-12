@@ -7,8 +7,14 @@ var angular = require('angularjs')
 
   , Chart = require('./lib/chart')
   , template = require('./template')
+  , stylesheet = require('./stylesheet')
   , tip = new Tip('name');
+
 tip.el.addClass('fan-tip');
+
+module.exports = {
+  stylesheet: stylesheet
+};
 
 function rectCenter(rect) {
   return {

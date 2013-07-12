@@ -15,13 +15,15 @@
   },
   "development": {
     "chaijs/chai": "*",
-    "visionmedia/mocha": "*"
+    "visionmedia/mocha": "*",
+    "familyfound/svg-download": "*"
   },
   "license": "MIT",
   "main": "index.js",
   "scripts": [
     "index.js",
     "lib/chart.js",
+    "stylesheet.js",
     "template.js"
   ],
   "styles": [

@@ -1,11 +1,16 @@
 
+text {
+  font-family: sans-serif;
+}
+
 .printable .arc.person {
   fill: white;
   stroke: lightGrey;
+  stroke-width: 2px;
 }
 
 .printable .radial {
-  stroke-width: 3px;
+  stroke-width: 2px;
   stroke: black;
 }
 
