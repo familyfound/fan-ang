@@ -1,4 +1,19 @@
 
+.printable .arc.person {
+  fill: white;
+  stroke: lightGrey;
+}
+
+.printable .radial {
+  stroke-width: 3px;
+  stroke: black;
+}
+
+.printable text {
+  text-anchor: middle;
+  pointer-events: none;
+}
+
 .fan-tip {
   pointer-events: none;
 }

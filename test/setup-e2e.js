@@ -175,6 +175,13 @@ function Tester($scope) {
     gens: 7,
     center: {x: 250, y: 300}
   };
+  $scope.printableConfig = {
+    height: 600,
+    width: 1000,
+    ringWidth: 40,
+    gens: 7,center: {x:500, y:440},
+    printable: true
+  };
   $scope.otherConfig = {
     gens: 5,
     links: true

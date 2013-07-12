@@ -114,7 +114,11 @@ function makeNodes(chart, node, person, name, scope, config) {
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
   }));
-  chart.node(node, getLink(person, config));
+  var text = [person.display.name];
+  if (node.gen <= 5) {
+    text.push(person.display.lifespan);
+  }
+  chart.node(node, getLink(person, config), text);
   if (config.onNode) {
     config.onNode(node.el, person);
   }
@@ -199,7 +203,9 @@ angular.module('fan', [])
           gens: 0,
           links: false,
           tips: false,
-          removeRoot: false
+          removeRoot: false,
+          centerCircle: false,
+          printable: false
         }, config);
         if (attr.gens) config.gens = parseInt(attr.gens, 10);
         
