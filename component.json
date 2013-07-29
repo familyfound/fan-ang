@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "keywords": [],
   "dependencies": {
-    "jabapyth/angularjs": "*",
+    "jaredly/angularjs": "*",
     "familyfound/domlog": "*",
     "component/tip": "*",
     "simov/deep-copy": "*",

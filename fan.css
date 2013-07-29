@@ -11,7 +11,7 @@ text {
 
 .printable .radial {
   stroke-width: 2px;
-  stroke: black;
+  stroke: #999;
 }
 
 .printable text {

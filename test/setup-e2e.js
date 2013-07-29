@@ -175,6 +175,7 @@ function Tester($scope) {
   };
   $scope.slowConfig = {
     height: 400,
+    radials: true,
     gens: 7,
     center: {x: 250, y: 300}
   };
@@ -182,12 +183,14 @@ function Tester($scope) {
     height: 900,
     width: 1200,
     ringWidth: 40,
+    radials: true,
     gens: 9,
     center: {x:600, y:600},
     printable: true
   };
   $scope.otherConfig = {
-    gens: 5,
+    gens: 4,
+    radials: true,
     links: true
   };
   $scope.dl_printable = function () {
