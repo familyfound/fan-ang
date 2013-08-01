@@ -4,7 +4,9 @@ var angular = require('angularjs')
   // , angularSettings = require('angular-settings')
   , copy = require('deep-copy')
   , log = require('domlog')
-  , fan = require('fan');
+  , fan = require('fan')
+
+  , svgDownload = require('svg-download');
 
 log.init();
 
@@ -134,6 +136,7 @@ function makeFamilies(spousebase, spouses, maxChildren, scope) {
 function Tester($scope) {
   $scope.boxes = RandGens(man, 5);
   $scope.otherBoxes = MakeGens(man, 5);
+  $scope.printableBoxes = MakeGens(man, 9);
   $scope.slowBoxes = SlowGens(man, 7, $scope);
   $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
   $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
@@ -172,12 +175,28 @@ function Tester($scope) {
   };
   $scope.slowConfig = {
     height: 400,
+    radials: true,
     gens: 7,
     center: {x: 250, y: 300}
   };
+  $scope.printableConfig = {
+    height: 900,
+    width: 1200,
+    ringWidth: 40,
+    radials: true,
+    gens: 9,
+    center: {x:600, y:600},
+    printable: true
+  };
   $scope.otherConfig = {
-    gens: 5,
+    gens: 4,
+    radials: true,
     links: true
+  };
+  $scope.dl_printable = function () {
+    var svg = document.getElementById('printable').firstChild
+      , data = svgDownload('Example Printable', svg, fan.stylesheet);
+    document.location = data;
   };
 }
 

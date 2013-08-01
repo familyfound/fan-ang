@@ -7,8 +7,14 @@ var angular = require('angularjs')
 
   , Chart = require('./lib/chart')
   , template = require('./template')
+  , stylesheet = require('./stylesheet')
   , tip = new Tip('name');
+
 tip.el.addClass('fan-tip');
+
+module.exports = {
+  stylesheet: stylesheet
+};
 
 function rectCenter(rect) {
   return {
@@ -115,7 +121,11 @@ function makeNodes(chart, node, person, name, scope, config, root) {
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
   }));
-  chart.node(node, getLink(person, config));
+  var text = [person.display.name];
+  if (node.gen <= 5) {
+    text.push(person.display.lifespan);
+  }
+  chart.node(node, getLink(person, config), text);
   if (!root && config.onParent) {
     config.onParent(node.el, person);
   }
@@ -131,7 +141,7 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (person.status) {
     node.el.classed(person.status, true);
   }
-  if (!person.hideParents) {
+  if (!person.hideParents && node.gen < config.gens - 1) {
     if (person.father) {
       watches.push(makeNodes(chart, node.father, person.father,
                              name + '.father', scope, config));
@@ -199,10 +209,13 @@ angular.module('fan', [])
           center: {x: 250, y: 150},
           ringWidth: 20,
           doubleWidth: true,
-          gens: 0,
+          gens: 5,
+          radials: false,
           links: false,
           tips: false,
-          removeRoot: false
+          removeRoot: false,
+          centerCircle: false,
+          printable: false
         }, config);
         if (attr.gens) config.gens = parseInt(attr.gens, 10);
         
@@ -217,7 +230,9 @@ angular.module('fan', [])
             families: {}
           };
           chart.clear();
-          chart.addLines(config.gens);
+          if (config.radials) {
+            chart.addLines(config.gens);
+          }
 
           scope.person = value;
           if (watches) {

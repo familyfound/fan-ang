@@ -2,8 +2,12 @@
 default: build
 	@:
 
-build: index.js fan.css template.js
+build: index.js fan.css template.js stylesheet.js
 	@component build --dev
+
+stylesheet.js: fan.css
+	@component convert $<
+	@mv fan.css.js stylesheet.js
 
 template.js: template.html
 	@component convert $<

@@ -1,4 +1,24 @@
 
+text {
+  font-family: sans-serif;
+}
+
+.printable .arc.person {
+  fill: white;
+  stroke: lightGrey;
+  stroke-width: 2px;
+}
+
+.printable .radial {
+  stroke-width: 2px;
+  stroke: #999;
+}
+
+.printable text {
+  text-anchor: middle;
+  pointer-events: none;
+}
+
 .fan-tip {
   pointer-events: none;
 }
