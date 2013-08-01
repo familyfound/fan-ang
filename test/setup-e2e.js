@@ -163,9 +163,27 @@ function Tester($scope) {
     center: {x: 110, y: 130},
     tips: true,
     doubleWidth: false,
-    onNode: function (el, person) {
+    onSpouse: function (el, person) {
       el.on('click', function () {
-        console.log('clicked', person);
+        console.log('clicked spouse', person);
+        $scope.kidsBoxes = null;
+        $scope.$digest();
+        $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+        $scope.$digest();
+      });
+    },
+    onChild: function (el, person) {
+      el.on('click', function () {
+        console.log('clicked child', person);
+        $scope.kidsBoxes = null;
+        $scope.$digest();
+        $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
+        $scope.$digest();
+      });
+    },
+    onParent: function (el, person) {
+      el.on('click', function () {
+        console.log('clicked parent', person);
         $scope.kidsBoxes = null;
         $scope.$digest();
         $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
