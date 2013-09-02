@@ -1,6 +1,11 @@
 
-default: build
+lintfiles := *.js *.json
+
+default: lint-build
 	@:
+
+lint-build: build
+	@jshint --verbose --extra-ext=.js,.json $(lintfiles)
 
 build: index.js fan.css template.js stylesheet.js
 	@component build --dev

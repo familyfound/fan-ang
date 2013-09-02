@@ -125,18 +125,15 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (node.gen <= 5) {
     text.push(person.display.lifespan);
   }
-  chart.node(node, getLink(person, config), text);
+  chart.node(node, getLink(person, config), text, person.photo);
   if (!root && config.onParent) {
-    config.onParent(node.el, person);
+    config.onParent(node.el, person, node);
   }
   if (config.tips) {
-    node.el.on('mouseover', function (d) {
-      tip.message(person.display.name + ' ' + person.display.lifespan);
-      tip.show(d3.event.pageX, d3.event.pageY - 10);
-    });
-    node.el.on('mouseout', function (d) {
-      tip.hide();
-    });
+    tipNode(node.el, person);
+    if (node.photo) {
+      tipNode(node.photo, person);
+    }
   }
   if (person.status) {
     node.el.classed(person.status, true);
@@ -213,6 +210,8 @@ angular.module('fan', [])
           radials: false,
           links: false,
           tips: false,
+          sweep: Math.PI*5/4,
+          photos: false,
           removeRoot: false,
           centerCircle: false,
           printable: false

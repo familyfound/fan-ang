@@ -72,3 +72,12 @@ text {
   fill: rgb(115, 255, 176);
   background-color: rgb(115, 255, 176);
 }
+
+.person-photo {
+  cursor: pointer;
+}
+/*
+.person-photo:hover {
+  mask: url("#circle");
+}
+*/

@@ -46,11 +46,12 @@ var woman = {
   id: 'WOM-AN'
 };
 
-function MakeGens(base, max) {
+function MakeGens(base, max, photo) {
   if (max <= 0) return null;
   var person = copy(base);
-  person.father = MakeGens(man, max-1);
-  person.mother = MakeGens(woman, max-1);
+  person.father = MakeGens(man, max-1, photo);
+  person.mother = MakeGens(woman, max-1, photo);
+  person.photo = photo;
   person.todos = [];
   person.status = 'inactive';
   return person;
@@ -138,6 +139,20 @@ function Tester($scope) {
   $scope.otherBoxes = MakeGens(man, 5);
   $scope.printableBoxes = MakeGens(man, 9);
   $scope.slowBoxes = SlowGens(man, 7, $scope);
+
+  $scope.photosBoxes = MakeGens(man, 7, 'thumb.jpg');
+  $scope.photosConfig = {
+    gens: 7,
+    height: 1220,
+    width: 1220,
+    sweep: Math.PI*2,
+    photos: true,
+    center: {x: 610, y: 610},
+    tips: true,
+    doubleWidth: false,
+    ringWidth: 85
+  };
+  // With Kids
   $scope.kidsBoxes = SlowGens(man, 5, $scope, true, true);
   $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
   setTimeout(function () {
@@ -181,7 +196,7 @@ function Tester($scope) {
         $scope.$digest();
       });
     },
-    onParent: function (el, person) {
+    onParent: function (el, person, node) {
       el.on('click', function () {
         console.log('clicked parent', person);
         $scope.kidsBoxes = null;
