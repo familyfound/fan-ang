@@ -121,6 +121,10 @@ function makeNodes(chart, node, person, name, scope, config, root) {
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
   }));
+  watches.push(scope.$watch(name + '.photo', function (value, old) {
+    if (!value) return;
+    node.photo.attr('xlink:href', value);
+  }));
   var text = [person.display.name];
   if (node.gen <= 5) {
     text.push(person.display.lifespan);
@@ -210,6 +214,7 @@ angular.module('fan', [])
           radials: false,
           links: false,
           tips: false,
+          families: true,
           sweep: Math.PI*5/4,
           photos: false,
           removeRoot: false,
@@ -241,8 +246,10 @@ angular.module('fan', [])
           }
           watches = makeNodes(chart, node, value, name,
                               scope.$parent, config, true);
-          watches.push(makeFamilies(chart, node, value, config,
-                                    scope.$parent, name));
+          if (config.families) {
+            watches.push(makeFamilies(chart, node, value, config,
+                                      scope.$parent, name));
+          }
           node.el.attr('class', 'arc person me');
           if (config.removeRoot) {
             node.el.remove();
