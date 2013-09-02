@@ -52,6 +52,7 @@ function MakeGens(base, max, photo) {
   person.father = MakeGens(man, max-1, photo);
   person.mother = MakeGens(woman, max-1, photo);
   person.photo = photo;
+  person.photolink = 'http://google.com';
   person.todos = [];
   person.status = 'inactive';
   return person;
@@ -148,7 +149,8 @@ function Tester($scope) {
     sweep: Math.PI*2,
     photos: true,
     center: {x: 610, y: 610},
-    tips: true,
+    svgtips: true,
+    printable: true,
     doubleWidth: false,
     ringWidth: 85
   };

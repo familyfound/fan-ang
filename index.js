@@ -115,15 +115,12 @@ function makeFamilies(chart, node, person, config, scope, name) {
 
 function makeNodes(chart, node, person, name, scope, config, root) {
   if (!person) return [];
+  node.photolink = person.photolink;
   var watches = [];
   watches.push(scope.$watch(name + '.status', function (value, old) {
     if (!value) return;
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
-  }));
-  watches.push(scope.$watch(name + '.photo', function (value, old) {
-    if (!value) return;
-    node.photo.attr('xlink:href', value);
   }));
   var text = [person.display.name];
   if (node.gen <= 5) {
@@ -133,6 +130,14 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (!root && config.onParent) {
     config.onParent(node.el, person, node);
   }
+  /*
+  watches.push(scope.$watch(name + '.photo', function (value, old) {
+    if (!value) return;
+    if (node.photo) {
+      node.photo.attr('xlink:href', value);
+    }
+  }));
+  */
   if (config.tips) {
     tipNode(node.el, person);
     if (node.photo) {
@@ -225,9 +230,11 @@ angular.module('fan', [])
         
         element[0].innerHTML = '';
         var chart = new Chart(config);
+        scope.chart = chart;
         var node, watches;
         scope.$parent.$watch(name, function (value, old) {
           if (!value) return;
+
           node = {
             gen: 0,
             pos: 0,

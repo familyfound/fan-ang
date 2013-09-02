@@ -76,6 +76,31 @@ text {
 .person-photo {
   cursor: pointer;
 }
+
+.hovertext text {
+  display: none;
+}
+
+.hovertext .background {
+  stroke: black;
+  stroke-width: 8px;
+  fill: black;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.hovertext .foreground {
+  stroke: none;
+  fill: white;
+}
+
+.hovertext path {
+  fill: transparent;
+}
+
+.hovertext:hover text {
+  display: block;
+}
 /*
 .person-photo:hover {
   mask: url("#circle");
