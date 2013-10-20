@@ -32,9 +32,13 @@ function getLink(person, config) {
   }
 }
 
-function tipNode(node, person) {
+function tipNode(node, person, tips) {
   node.on('mouseover', function (d) {
-    tip.message(person.display.name + ' ' + person.display.lifespan);
+    var message = person.display.name + ' ' + person.display.lifespan;
+    if ('function' === typeof tips) {
+      message = tips(person);
+    }
+    tip.message(message);
     tip.show(d3.event.pageX, d3.event.pageY - 10);
   });
   node.on('mouseout', function (d) {
@@ -54,7 +58,7 @@ function makeChild(chart, ccounts, i, nodes, family, config) {
     nodes[i].classed(child.status, true);
   }
   if (config.tips) {
-    tipNode(nodes[i], child);
+    tipNode(nodes[i], child, config.tips);
   }
 }
 
@@ -67,7 +71,7 @@ function makeMother(chart, ccounts, nodes, family, config) {
     config.onSpouse(nodes[0], mother);
   }
   if (config.tips) {
-    tipNode(nodes[0], mother);
+    tipNode(nodes[0], mother, config.tips);
   }
   if (mother.status) {
     nodes[0].classed(mother.status, true);
@@ -139,9 +143,9 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   }));
   */
   if (config.tips) {
-    tipNode(node.el, person);
+    tipNode(node.el, person, config.tips);
     if (node.photo) {
-      tipNode(node.photo, person);
+      tipNode(node.photo, person, config.tips);
     }
   }
   if (person.status) {
