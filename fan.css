@@ -21,6 +21,9 @@ text {
 
 .fan-tip {
   pointer-events: none;
+}
+
+.fan-tip .tip-inner {
   text-align: left;
 }
 
