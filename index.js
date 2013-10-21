@@ -85,27 +85,29 @@ function makeFamilies(chart, node, person, config, scope, name) {
     , ccounts = []
     , watches = []
     , family;
+  function newMother(motherId, ccounts, value) {
+      makeMother(chart, ccounts, node.families[motherId],
+                 person.families[motherId], config);
+  }
+  function newChild(motherId, j, family, ccounts, value) {
+    if (family[j] && !node.families[motherId][j]) {
+      makeChild(chart, ccounts, j, node.families[motherId], family, config);
+    }
+  }
   for (var motherId in person.families) {
     if (!node.families[motherId]) node.families[motherId] = {};
     family = person.families[motherId];
     makeMother(chart, ccounts, node.families[motherId], family, config);
 
     watches.push(scope.$watch(name + '.families["' + motherId + '"][0]',
-                 function (motherId, ccounts, value) {
-      makeMother(chart, ccounts, node.families[motherId],
-                 person.families[motherId], config);
-    }.bind(null, motherId, ccounts.slice())));
+                              newMother.bind(null, motherId, ccounts.slice())));
     
     for (var j=1; j<family.length; j++) {
       if (family[j] && !node.families[motherId][j]) {
         makeChild(chart, ccounts, j, node.families[motherId], family, config);
       }
       watches.push(scope.$watch(name + '.families["' + motherId + '"][' + j + ']',
-                   function (motherId, j, family, ccounts, value) {
-        if (family[j] && !node.families[motherId][j]) {
-          makeChild(chart, ccounts, j, node.families[motherId], family, config);
-        }
-      }.bind(null, motherId, j, family, ccounts.slice())));
+                                newChild.bind(null, motherId, j, family, ccounts.slice())));
     }
     ccounts.push(family.length - 1);
     i++;
