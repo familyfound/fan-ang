@@ -50,6 +50,17 @@ text {
   stroke-width: 4px;
 }
 
+.fan-borders path {
+  stroke: white;
+  stroke-width: 4px;
+  fill: transparent;
+  pointer-events: none;
+}
+
+.indicator {
+  pointer-events: none;
+}
+
 .radial {
   stroke: #ccc;
   fill: transparent;

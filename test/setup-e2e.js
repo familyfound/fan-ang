@@ -75,7 +75,11 @@ function RandGens(base, max) {
 }
 
 function randStatus() {
-  return ['inactive', 'active', 'clean', 'complete'][parseInt(Math.random()*4)];
+  return pick(['inactive', 'active', 'clean', 'complete']);
+}
+
+function pick(from) {
+  return from[parseInt(Math.random() * from.length)];
 }
 
 function SlowGens(base, max, scope, stati) {
@@ -173,6 +177,20 @@ function Tester($scope) {
     $scope.kidsBoxes.families = makeFamilies(woman, 1 + parseInt(Math.random() * 5), 15, $scope);
     $scope.$digest();
   }, 5000);
+  $scope.indConfig = {
+    gens: 5,
+    height: 370,
+    width: 420,
+    // ringWidth: 40,
+    center: {x: 210, y: 230},
+    tips: true,
+    doubleWidth: false,
+    indicators: [true, true],
+    onParent: function (el, person, node) {
+      node.indicators[0].classed(pick('ok danger warning awesome'.split(' ')), true);
+      node.indicators[1].classed(pick('ok danger warning awesome'.split(' ')), true);
+    }
+  };
   $scope.kidsConfig = {
     gens: 5,
     height: 170,
