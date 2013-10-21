@@ -1,0 +1,20 @@
+
+.indicator {
+  fill: transparent;
+}
+
+.indicator.ok {
+  display: none;
+}
+
+.indicator.awesome {
+  fill: green;
+}
+
+.indicator.danger {
+  fill: #red;
+}
+
+.indicator.warning {
+  fill: #faa;
+}

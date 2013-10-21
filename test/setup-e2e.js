@@ -181,7 +181,7 @@ function Tester($scope) {
     gens: 5,
     height: 370,
     width: 420,
-    // ringWidth: 40,
+    ringWidth: 30,
     center: {x: 210, y: 230},
     tips: true,
     doubleWidth: false,
