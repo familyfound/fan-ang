@@ -2,7 +2,7 @@
   "name": "fan",
   "repo": "familyfound/fan",
   "description": "A Fan angular directive",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "keywords": [],
   "dependencies": {
     "jaredly/angularjs": "*",
