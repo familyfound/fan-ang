@@ -136,6 +136,9 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (!root && config.onParent) {
     config.onParent(node.el, person, node);
   }
+  if (root && config.onRoot) {
+    config.onRoot(node.el, person, node);
+  }
   /*
   watches.push(scope.$watch(name + '.photo', function (value, old) {
     if (!value) return;
