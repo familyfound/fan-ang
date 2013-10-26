@@ -7,11 +7,11 @@
   "dependencies": {
     "jaredly/angularjs": "*",
     "familyfound/domlog": "*",
-    "component/tip": "*",
+    "component/tip": "0.2.1",
     "simov/deep-copy": "*",
     "mbostock/d3": "*",
     "gorillatron/extend": "*",
-    "component/aurora-tip": "*"
+    "component/aurora-tip": "0.0.2"
   },
   "development": {
     "chaijs/chai": "*",
