@@ -126,11 +126,13 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (!person) return [];
   node.photolink = person.photolink;
   var watches = [];
+  /*
   watches.push(scope.$watch(name + '.status', function (value, old) {
     if (!value) return;
     if (old) node.el.classed(old, false);
     if (value) node.el.classed(value, true);
   }));
+  */
   var text = [person.display.name];
   if (node.gen <= 5) {
     text.push(person.display.lifespan);
@@ -142,7 +144,13 @@ function makeNodes(chart, node, person, name, scope, config, root) {
   if (root && config.onRoot) {
     config.onRoot(node.el, person, node);
   }
+  if (person.status) {
+    node.el.classed(person.status, true);
+  }
   /*
+  if (config.watch) {
+    watches.push(scope.$watch(name + '.' + config.watch.attr, config.watch.handler.bind(null, node.el, person, node)))
+  }
   watches.push(scope.$watch(name + '.photo', function (value, old) {
     if (!value) return;
     if (node.photo) {
