@@ -4,13 +4,14 @@ var angular = require('angularjs')
   , Tip = require('tip')
   , d3 = require('d3')
   , extend = require('extend')
+  , classes = require('classes')
 
   , Chart = require('./lib/chart')
   , template = require('./template')
   , stylesheet = require('./stylesheet')
   , tip = new Tip('name');
 
-tip.el.addClass('fan-tip');
+classes(tip.el).add('fan-tip');
 
 module.exports = {
   stylesheet: stylesheet
@@ -42,7 +43,9 @@ function tipNode(node, person, tips) {
     tip.show(d3.event.pageX, d3.event.pageY - 10);
   });
   node.on('mouseout', function (d) {
-    tip.hide();
+    try {
+      tip.hide();
+    } catch (e) {}
   });
 }
 
