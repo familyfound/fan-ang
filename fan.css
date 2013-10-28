@@ -88,6 +88,11 @@ text {
   background-color: rgb(115, 255, 176);
 }
 
+.person.hard {
+  fill: #f00;
+  background-color: #f00;
+}
+
 .person-photo {
   cursor: pointer;
 }
